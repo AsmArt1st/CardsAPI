@@ -61,7 +61,6 @@ public class HandTest {
     @Test
     void removeMissingCardDoesNothing() {
         Hand hand = new Hand("Player");
-
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
         assertDoesNotThrow(() -> {
@@ -93,9 +92,60 @@ public class HandTest {
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
         hand.addCard(card);
+
         assertEquals(1, hand.size());
 
         hand.removeCard(card);
+
         assertEquals(0, hand.size());
+    }
+
+    @Test
+    void transferCardMovesCard() {
+        Hand source = new Hand("Source");
+        Hand destination = new Hand("Destination");
+
+        Card card = new Card(Rank.ACE, Suit.SPADES);
+
+        source.addCard(card);
+
+        source.transferCard(destination, card);
+
+        assertFalse(source.getCards().contains(card));
+        assertTrue(destination.getCards().contains(card));
+    }
+
+    @Test
+    void transferNullPileThrowsException() {
+        Hand hand = new Hand("Player");
+        Card card = new Card(Rank.ACE, Suit.SPADES);
+
+        hand.addCard(card);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            hand.transferCard(null, card);
+        });
+    }
+
+    @Test
+    void transferNullCardThrowsException() {
+        Hand hand = new Hand("Player");
+        Hand destination = new Hand("Destination");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            hand.transferCard(destination, null);
+        });
+    }
+
+    @Test
+    void transferMissingCardThrowsException() {
+        Hand hand = new Hand("Player");
+        Hand destination = new Hand("Destination");
+
+        Card card = new Card(Rank.ACE, Suit.SPADES);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            hand.transferCard(destination, card);
+        });
     }
 }

@@ -54,11 +54,16 @@ public class DeckTest {
     }
 
     @Test
-    void shuffleKeepsSameAmountOfCards() {
+    void shuffleKeepsSameCards() {
         Deck deck = new Deck("Standard");
+
+        HashSet<Card> beforeShuffle = new HashSet<>(deck.getCards());
 
         deck.shuffle();
 
+        HashSet<Card> afterShuffle = new HashSet<>(deck.getCards());
+
+        assertEquals(beforeShuffle, afterShuffle);
         assertEquals(52, deck.size());
     }
 
@@ -71,6 +76,17 @@ public class DeckTest {
 
         assertEquals(47, deck.size());
         assertEquals(5, hand.size());
+    }
+
+    @Test
+    void dealMovesCardsToHand() {
+        Deck deck = new Deck("Standard");
+        Hand hand = new Hand("Player");
+
+        deck.deal(hand, 10);
+
+        assertEquals(42, deck.size());
+        assertEquals(10, hand.size());
     }
 
     @Test

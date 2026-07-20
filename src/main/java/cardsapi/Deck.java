@@ -1,7 +1,6 @@
 package cardsapi;
 
 //imports yay
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,44 +13,42 @@ import java.util.List;
  * Stores card objects
  */
 
-public class Deck {
+public class Deck extends Pile{
     
-    //Fields
-    private final List<Card> cards;
-    private final String deckName;
-
-
     /**
      * Constructs a deck object
      * 
-     * @param deckName needs a string to title the deck for string formatting (toString())
-     * @throws IllegalArgumentException if deck name is less than 1 character or is null
+     * @param name name assigned to Deck object
+     * @throws IllegalArgumentException if deck name is less than 1 character
+     * @throws IllegalArgumentException if deck name is null
      */
 
-    public Deck(String deckName) {
-        
-        //validation
-        if (deckName == null) {
-            throw new IllegalArgumentException("Deck name cannot be null");
-        }
-
-        if (deckName.length() < 1) {
-            throw new IllegalArgumentException("Deck name must contain at least 1 character");
-        }
+    public Deck(String name) {
 
         //method body
-        cards = new ArrayList<>(52);
-        this.deckName = deckName;
+        super(name);
         for (Suit suit : Suit.values()) {
             for (Rank rank : Rank.values()) {
-                cards.add(new Card(rank, suit));
+                addCard(new Card(rank, suit));
             }
         }
     }
 
     //Deck commands
 
-    
+    /**
+     * Helper method to cast deck backing collection
+     * 
+     * Provides access to a deck's backing collection for modification
+     * 
+     * @return returns deck backing collection as a modifiable List
+     */
+
+    private List<Card> getDeckList() {
+        return (List<Card>) getBackingCollection();
+    }
+
+
     /**
      * Shuffles the given deck
      * 
@@ -59,16 +56,18 @@ public class Deck {
      */
 
     public void shuffle() {
-        Collections.shuffle(cards);
+        Collections.shuffle(getDeckList());
     }
 
 
     /**
-     * Deals x cards from the given deck to a specified hand
+     * Deals x cards from the top of the given deck to a specified hand
      * 
      * @param hand needs a hand object as an input to deal cards to
      * @param dealSize needs an integer to decide how many cards to deal
-     * @throws IllegalArgumentException if hand is null, if dealSize is less than 1, or if there arent enough cards left in specified deck
+     * @throws IllegalArgumentException if hand is null
+     * @throws IllegalArgumentException if dealSize is less than 1
+     * @throws IllegalArgumentException if there aren't enough cards left in specified deck
      */
     public void deal(Hand hand, int dealSize) {
 
@@ -81,58 +80,14 @@ public class Deck {
             throw new IllegalArgumentException("Must deal at least 1 card");
         }
 
-        if (dealSize > cards.size()) {
+        if (dealSize > size()) {
             throw new IllegalArgumentException("Not enough cards left in deck");
         }
         
         //method body
         for (int i = 0; i < dealSize; i++) {
-            Card topCard = cards.remove(0);
-            hand.addCard(topCard);
+            Card topCard = getDeckList().get(0);
+            transferCard(hand, topCard);
         }
-    }
-
-
-    /**
-     * Gets size of given deck
-     * 
-     * @return returns the number of card objects in a deck list
-     */
-
-    public int size() {
-        return cards.size();
-    }
-
-
-    /**
-     * Gets name of given deck
-     * 
-     * @return returns the string passed into the deck constructor
-     */
-
-    public String getName() {
-        return deckName;
-    }
-
-
-    /**
-     * Gives an unmodifiable list of cards to caller
-     * 
-     * @return returns a list of the cards in given deck that cannot be modified
-     */
-
-    public List<Card> getCards() {
-        return Collections.unmodifiableList(cards);
-    }
-
-    //deck string formatting
-    @Override
-    public String toString() {
-        String deck = deckName + ":" + "\n";
-        for (Card card: cards) {
-            deck += card;
-            deck += "\n";
-        }
-        return deck;
     }
 }
