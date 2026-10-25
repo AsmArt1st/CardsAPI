@@ -15,6 +15,7 @@ public class Card {
     //fields
     private final Rank rank;
     private final Suit suit;
+    private final Joker joker;
 
 
     /**
@@ -38,8 +39,27 @@ public class Card {
 
         this.rank = rank;
         this.suit = suit;
+        this.joker = null;
     }
 
+    /**
+     * Constructs a joker card object
+     * 
+     * @param joker takes in a joker enum as a parameter to store the value of the card
+     * @throws IllegalArgumentException if joker parameter is null
+     */
+
+    public Card(Joker joker) {
+
+        //validation
+        if (joker == null) {
+            throw new IllegalArgumentException("Joker cannot be null");
+        }
+
+        this.joker = joker;
+        this.rank = null;
+        this.suit = null;
+    }
 
     /**
      * Allows caller to get the rank of given card
@@ -62,11 +82,47 @@ public class Card {
         return suit;
     }
 
+    /**
+     * Allows caller to get the joker value of given card
+     * 
+     * @return returns joker value of given card
+     */
+
+    public Joker getJoker() {
+        return joker;
+    }
+
+    public boolean isJoker() {
+        if (rank == null && suit == null) {
+            return true;
+        } 
+        else {
+            return false;
+        }
+    }
+
+    public boolean isStandard() {
+        if (joker == null) {
+            return true;
+        } 
+        else {
+            return false;
+        }
+    }
+
 
     //card string formatting
     @Override
     public String toString() {
+        if (isStandard()) {
         return rank + " of " + suit;
+        }
+        else if (isJoker()) {
+            return joker.toString();
+        }
+        else {
+            throw new IllegalStateException("Card is in an invalid state: neither standard nor joker");
+        }
     }
 
     /**
@@ -80,12 +136,29 @@ public class Card {
             return false;
         }
 
-        return rank == otherCard.rank && suit == otherCard.suit;
+        if (otherCard.isStandard()) {
+            return rank == otherCard.rank && suit == otherCard.suit;
+        }
+        else if (otherCard.isJoker()) {
+            return joker == otherCard.joker;
+        }
+        else {
+            throw new IllegalStateException("Card is in an invalid state: neither standard nor joker");
+        }
     }
 
-    //hashCode method override
+    //hashCode() method override
     @Override
     public int hashCode() {
-        return Objects.hash(rank, suit);
+
+        if (isStandard()) {
+            return Objects.hash(rank, suit);
+        }
+        else if (isJoker()) {
+            return Objects.hash(joker);
+        }
+        else {
+            throw new IllegalStateException("Card is in an invalid state: neither standard nor joker");
+        }
     }
 }

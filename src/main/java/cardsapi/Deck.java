@@ -3,6 +3,7 @@ package cardsapi;
 //imports yay
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -19,18 +20,55 @@ public class Deck extends Pile{
      * Constructs a deck object
      * 
      * @param name name assigned to Deck object
+     * @param builder 
      * @throws IllegalArgumentException if deck name is less than 1 character
      * @throws IllegalArgumentException if deck name is null
      */
 
-    public Deck(String name) {
-
-        //method body
+    private Deck(List<Card> cards, String name) {
+        
         super(name);
-        for (Suit suit : Suit.values()) {
-            for (Rank rank : Rank.values()) {
-                addCard(new Card(rank, suit));
+        getBackingCollection().addAll(cards);
+        }
+
+    public static class Builder {
+        
+        //fields
+        private String deckName;
+        private boolean hasJokers;
+        private int numDecks;
+        private List<Card> tempCards = new ArrayList<>();
+
+        public Builder(String deckName) {
+            this.deckName = deckName;
+        }
+
+        public Builder withJokers(boolean hasJokers) {
+            this.hasJokers = hasJokers;
+            return this;
+        }
+
+        public Builder deckCount(int numDecks) {
+            this.numDecks = numDecks;
+            return this;
+        }
+
+        public Deck build() {
+
+            for (int i=0; i < numDecks; i++) {
+                for (Suit suit : Suit.values()) {
+                    for (Rank rank : Rank.values()) {
+                        tempCards.add(new Card(rank, suit));
+                    }
+                }
+                if (hasJokers) {
+                    for (Joker joker : Joker.values()) {
+                        tempCards.add(new Card(joker));
+                    }
+                }
             }
+
+            return new Deck(this.tempCards, this.deckName);
         }
     }
 
@@ -86,7 +124,7 @@ public class Deck extends Pile{
         
         //method body
         for (int i = 0; i < dealSize; i++) {
-            Card topCard = getDeckList().get(0);
+            Card topCard = getDeckList().get(size()-1);
             transferCard(hand, topCard);
         }
     }
