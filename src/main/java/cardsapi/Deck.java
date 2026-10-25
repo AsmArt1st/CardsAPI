@@ -15,21 +15,6 @@ import java.util.ArrayList;
  */
 
 public class Deck extends Pile{
-    
-    /**
-     * Constructs a deck object
-     * 
-     * @param name name assigned to Deck object
-     * @param builder 
-     * @throws IllegalArgumentException if deck name is less than 1 character
-     * @throws IllegalArgumentException if deck name is null
-     */
-
-    private Deck(List<Card> cards, String name) {
-        
-        super(name);
-        getBackingCollection().addAll(cards);
-        }
 
     public static class Builder {
         
@@ -71,6 +56,22 @@ public class Deck extends Pile{
             return new Deck(this.tempCards, this.deckName);
         }
     }
+
+    /**
+     * Constructs a deck object
+     * 
+     * @param name name assigned to Deck object
+     * @param builder 
+     * @throws IllegalArgumentException if deck name is less than 1 character
+     * @throws IllegalArgumentException if deck name is null
+     */
+
+    private Deck(List<Card> cards, String name) {
+        
+        super(name);
+        getBackingCollection().addAll(cards);
+    }
+
 
     //Deck commands
 
