@@ -142,6 +142,9 @@ public class Card {
         else if (otherCard.isJoker()) {
             return joker == otherCard.joker;
         }
+        else if (this.isJoker() != otherCard.isJoker()) {
+            return false;
+        }
         else {
             throw new IllegalStateException("Card is in an invalid state: neither standard nor joker");
         }

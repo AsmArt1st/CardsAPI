@@ -3,6 +3,7 @@ package cardsapi;
 //imports yay
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 
 
@@ -94,8 +95,10 @@ public class Deck extends Pile{
      * randomizes the position of cards in a given deck
      */
 
-    public void shuffle() {
-        Collections.shuffle(getDeckList());
+    public void shuffle(long seed) {
+
+        Random random = new Random(seed);
+        Collections.shuffle(getDeckList(), random);
     }
 
 
@@ -108,6 +111,7 @@ public class Deck extends Pile{
      * @throws IllegalArgumentException if dealSize is less than 1
      * @throws IllegalArgumentException if there aren't enough cards left in specified deck
      */
+
     public void deal(Hand hand, int dealSize) {
 
         //validation

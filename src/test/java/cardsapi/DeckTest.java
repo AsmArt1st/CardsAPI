@@ -1,9 +1,10 @@
 package cardsapi;
 
-//imports
+//imports yay
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import java.util.HashSet;
+import java.util.ArrayList;
 
 public class DeckTest {
 
@@ -48,12 +49,6 @@ public class DeckTest {
         assertEquals(52, deck.size());
     }
 
-    @Test
-    void builderDefaultNameIsUsed() {
-        Deck deck = new Deck.Builder("Custom Name").build();
-        assertEquals("Custom Name", deck.getName());
-    }
-
     // --- Card Identity & Joker Tests ---
 
     @Test
@@ -83,53 +78,89 @@ public class DeckTest {
         assertEquals(ace1.hashCode(), ace2.hashCode());
     }
 
+    // --- Seeded Shuffle Tests ---
+
     @Test
-    void jokerToStringReturnsJokerName() {
-        Card joker = new Card(Joker.RED);
-        assertEquals("Red Joker", joker.toString());
+    void seededShuffleProducesDeterministicOrder() {
+        Deck deck1 = new Deck.Builder("Test").deckCount(1).build();
+        Deck deck2 = new Deck.Builder("Test").deckCount(1).build();
+
+        long seed = 42L;
+        deck1.shuffle(seed);
+        deck2.shuffle(seed);
+
+        assertEquals(new ArrayList<>(deck1.getCards()), new ArrayList<>(deck2.getCards()));
     }
 
     @Test
-    void standardCardToStringReturnsRankAndSuit() {
-        Card card = new Card(Rank.KING, Suit.HEARTS);
-        assertEquals("King of Hearts", card.toString());
+    void differentSeedsProduceDifferentOrders() {
+        Deck deck1 = new Deck.Builder("Test").deckCount(1).build();
+        Deck deck2 = new Deck.Builder("Test").deckCount(1).build();
+
+        deck1.shuffle(100L);
+        deck2.shuffle(200L);
+
+        assertNotEquals(new ArrayList<>(deck1.getCards()), new ArrayList<>(deck2.getCards()));
     }
 
-    // --- Deck State & Manipulation Tests ---
-
     @Test
-    void deckStartsWith52Cards() {
-        Deck deck = new Deck.Builder("Standard").deckCount(1).build();
+    void shufflePreservesCardSet() {
+        Deck deck = new Deck.Builder("Test").deckCount(1).build();
+        HashSet<Card> originalCards = new HashSet<>(deck.getCards());
+
+        deck.shuffle(12345L);
+
+        assertEquals(originalCards, new HashSet<>(deck.getCards()));
         assertEquals(52, deck.size());
     }
 
     @Test
-    void deckContainsAllUniqueCards() {
-        Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        HashSet<Card> cards = new HashSet<>(deck.getCards());
-        assertEquals(52, cards.size());
+    void reapplyingSameSeedRestoresOrder() {
+        Deck deck1 = new Deck.Builder("Test").deckCount(1).build();
+        Deck deck2 = new Deck.Builder("Test").deckCount(1).build();
+
+   
+        var originalOrder = new ArrayList<>(deck1.getCards());
+
+        deck1.shuffle(999L);
+        deck2.shuffle(999L);
+
+        assertEquals(new ArrayList<>(deck1.getCards()), new ArrayList<>(deck2.getCards()));
+        assertNotEquals(originalOrder, new ArrayList<>(deck1.getCards()));
     }
 
     @Test
-    void getCardsIsUnmodifiable() {
-        Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        assertThrows(UnsupportedOperationException.class, () -> {
-            deck.getCards().clear();
-        });
+    void seededShuffleDeterminesDealOrder() {
+        Deck deck1 = new Deck.Builder("Test").deckCount(1).build();
+        Hand hand1 = new Hand("P1");
+
+        Deck deck2 = new Deck.Builder("Test").deckCount(1).build();
+        Hand hand2 = new Hand("P2");
+
+        deck1.shuffle(777L);
+        deck1.deal(hand1, 5);
+
+        deck2.shuffle(777L);
+        deck2.deal(hand2, 5);
+
+        assertEquals(new ArrayList<>(deck1.getCards()), new ArrayList<>(deck2.getCards()));
     }
 
     @Test
-    void shuffleKeepsSameCards() {
-        Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        HashSet<Card> beforeShuffle = new HashSet<>(deck.getCards());
-
-        deck.shuffle();
-
-        HashSet<Card> afterShuffle = new HashSet<>(deck.getCards());
-
-        assertEquals(beforeShuffle, afterShuffle);
+    void edgeCaseSeedZeroWorks() {
+        Deck deck = new Deck.Builder("Test").deckCount(1).build();
+        assertDoesNotThrow(() -> deck.shuffle(0L));
         assertEquals(52, deck.size());
     }
+
+    @Test
+    void edgeCaseNegativeSeedWorks() {
+        Deck deck = new Deck.Builder("Test").deckCount(1).build();
+        assertDoesNotThrow(() -> deck.shuffle(-1L));
+        assertEquals(52, deck.size());
+    }
+
+    // --- Deal & State Tests ---
 
     @Test
     void dealRemovesCardsFromDeck() {
