@@ -68,6 +68,7 @@ public class Card {
     */
 
     public Rank getRank() {
+
         return rank;
     }
 
@@ -79,6 +80,7 @@ public class Card {
      */
 
     public Suit getSuit() {
+        
         return suit;
     }
 
@@ -89,10 +91,12 @@ public class Card {
      */
 
     public Joker getJoker() {
+
         return joker;
     }
 
     public boolean isJoker() {
+
         if (rank == null && suit == null) {
             return true;
         } 
@@ -102,6 +106,7 @@ public class Card {
     }
 
     public boolean isStandard() {
+
         if (joker == null) {
             return true;
         } 
@@ -114,6 +119,7 @@ public class Card {
     //card string formatting
     @Override
     public String toString() {
+        
         if (isStandard()) {
         return rank + " of " + suit;
         }

@@ -8,7 +8,7 @@ public class HandTest {
 
     @Test
     void validConstructor() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         assertEquals("Player", hand.getName());
     }
@@ -16,20 +16,20 @@ public class HandTest {
     @Test
     void emptyNameThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Hand("");
+            new Hand.Builder("").build();
         });
     }
 
     @Test
     void nullNameThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new Hand(null);
+            new Hand.Builder(null).build();
         });
     }
 
     @Test
     void addCardWorks() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
         hand.addCard(card);
@@ -39,7 +39,7 @@ public class HandTest {
 
     @Test
     void addMultipleCardsWorks() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         hand.addCard(new Card(Rank.ACE, Suit.SPADES));
         hand.addCard(new Card(Rank.KING, Suit.HEARTS));
@@ -49,7 +49,7 @@ public class HandTest {
 
     @Test
     void removeCardWorks() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
         hand.addCard(card);
@@ -60,7 +60,7 @@ public class HandTest {
 
     @Test
     void removeMissingCardDoesNothing() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
         assertDoesNotThrow(() -> {
@@ -70,7 +70,7 @@ public class HandTest {
 
     @Test
     void getCardsIsUnmodifiable() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         hand.addCard(new Card(Rank.ACE, Suit.SPADES));
 
@@ -81,14 +81,14 @@ public class HandTest {
 
     @Test
     void sizeStartsAtZero() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         assertEquals(0, hand.size());
     }
 
     @Test
     void sizeChangesAfterAddAndRemove() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
         hand.addCard(card);
@@ -102,22 +102,22 @@ public class HandTest {
 
     @Test
     void transferCardMovesCard() {
-        Hand source = new Hand("Source");
-        Hand destination = new Hand("Destination");
+        Hand hand = new Hand.Builder("Player").build();
+        Hand destination = new Hand.Builder("Destination").build();
 
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
-        source.addCard(card);
+        hand.addCard(card);
 
-        source.transferCard(destination, card);
+        hand.transferCard(destination, card);
 
-        assertFalse(source.getCards().contains(card));
+        assertFalse(hand.getCards().contains(card));
         assertTrue(destination.getCards().contains(card));
     }
 
     @Test
     void transferNullPileThrowsException() {
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
         Card card = new Card(Rank.ACE, Suit.SPADES);
 
         hand.addCard(card);
@@ -129,8 +129,8 @@ public class HandTest {
 
     @Test
     void transferNullCardThrowsException() {
-        Hand hand = new Hand("Player");
-        Hand destination = new Hand("Destination");
+        Hand hand = new Hand.Builder("Player").build();
+        Hand destination = new Hand.Builder("Destination").build();
 
         assertThrows(IllegalArgumentException.class, () -> {
             hand.transferCard(destination, null);
@@ -139,8 +139,8 @@ public class HandTest {
 
     @Test
     void transferMissingCardThrowsException() {
-        Hand hand = new Hand("Player");
-        Hand destination = new Hand("Destination");
+        Hand hand = new Hand.Builder("Player").build();
+        Hand destination = new Hand.Builder("Destination").build();
 
         Card card = new Card(Rank.ACE, Suit.SPADES);
 

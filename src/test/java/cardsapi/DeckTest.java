@@ -1,10 +1,11 @@
 package cardsapi;
-
-//imports yay
+//imports
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Deque;
 
 public class DeckTest {
 
@@ -89,7 +90,7 @@ public class DeckTest {
         deck1.shuffle(seed);
         deck2.shuffle(seed);
 
-        assertEquals(new ArrayList<>(deck1.getCards()), new ArrayList<>(deck2.getCards()));
+        assertEquals(new ArrayList<>(deck1.getBackingCollection()), new ArrayList<>(deck2.getBackingCollection()));
     }
 
     @Test
@@ -100,7 +101,7 @@ public class DeckTest {
         deck1.shuffle(100L);
         deck2.shuffle(200L);
 
-        assertNotEquals(new ArrayList<>(deck1.getCards()), new ArrayList<>(deck2.getCards()));
+        assertNotEquals(deck1.getBackingCollection(), deck2.getBackingCollection());
     }
 
     @Test
@@ -119,23 +120,20 @@ public class DeckTest {
         Deck deck1 = new Deck.Builder("Test").deckCount(1).build();
         Deck deck2 = new Deck.Builder("Test").deckCount(1).build();
 
-   
-        var originalOrder = new ArrayList<>(deck1.getCards());
+        long seed = 999L;
+        deck1.shuffle(seed);
+        deck2.shuffle(seed);
 
-        deck1.shuffle(999L);
-        deck2.shuffle(999L);
-
-        assertEquals(new ArrayList<>(deck1.getCards()), new ArrayList<>(deck2.getCards()));
-        assertNotEquals(originalOrder, new ArrayList<>(deck1.getCards()));
+        assertEquals(new ArrayList<>(deck1.getBackingCollection()), new ArrayList<>(deck2.getBackingCollection()));
     }
 
     @Test
     void seededShuffleDeterminesDealOrder() {
         Deck deck1 = new Deck.Builder("Test").deckCount(1).build();
-        Hand hand1 = new Hand("P1");
+        Hand hand1 = new Hand.Builder("P1").build();
 
         Deck deck2 = new Deck.Builder("Test").deckCount(1).build();
-        Hand hand2 = new Hand("P2");
+        Hand hand2 = new Hand.Builder("P2").build();
 
         deck1.shuffle(777L);
         deck1.deal(hand1, 5);
@@ -143,7 +141,7 @@ public class DeckTest {
         deck2.shuffle(777L);
         deck2.deal(hand2, 5);
 
-        assertEquals(new ArrayList<>(deck1.getCards()), new ArrayList<>(deck2.getCards()));
+        assertEquals(hand1.getBackingCollection(), hand2.getBackingCollection());
     }
 
     @Test
@@ -160,12 +158,108 @@ public class DeckTest {
         assertEquals(52, deck.size());
     }
 
+    // --- Draw/Peek & State Tests (Phase 4) ---
+
+    @Test
+    void peekTopCardReturnsTopCard() {
+        Deck deck = new Deck.Builder("Test").deckCount(1).build();
+        deck.shuffle(12345L); // Shuffle to ensure order is consistent
+
+        Card topCard = deck.peekTopCard();
+        assertNotNull(topCard, "Top card should not be null in a full deck");
+        assertEquals(((Deque<Card>) deck.getBackingCollection()).peekLast(), topCard);
+    }
+
+    @Test
+    void peekTopCardOnEmptyDeckReturnsNull() {
+
+        Deck fullDeck = new Deck.Builder("Test").deckCount(1).build();
+        while (fullDeck.size() > 0) {
+            fullDeck.drawTopCard(new Hand.Builder("Temp").build());
+        }
+
+        assertNull(fullDeck.peekTopCard());
+    }
+
+    @Test
+    void drawTopCardRemovesFromDeck() {
+        Deck deck = new Deck.Builder("Test").deckCount(1).build();
+        Hand hand = new Hand.Builder("Player").build();
+
+        int sizeBefore = deck.size();
+        deck.drawTopCard(hand);
+
+        assertEquals(sizeBefore - 1, deck.size());
+        assertEquals(1, hand.size());
+    }
+
+    @Test
+    void resetRestoresOriginalDeck() {
+        Deck deck = new Deck.Builder("Test").deckCount(1).build();
+        List<Card> originalCards = new ArrayList<>(deck.getBackingCollection());
+
+        deck.shuffle(999L);
+        deck.drawTopCard(new Hand.Builder("Temp").build()); // Remove one to make it different
+
+        deck.reset();
+
+        assertEquals(originalCards, new ArrayList<>(deck.getBackingCollection()));
+    }
+
+    // --- Deck Manipulation Tests ---
+
+    @Test
+    void cutSplitsDeckCorrectly() {
+        Deck deck = new Deck.Builder("Test").deckCount(1).build();
+        int originalSize = deck.size();
+
+        deck.cut();
+
+        assertEquals(originalSize, deck.size());
+        assertNotEquals(new ArrayList<>(deck.getBackingCollection()), 
+                        new ArrayList<>(new Deck.Builder("Test").deckCount(1).build().getBackingCollection()));
+    }
+
+    @Test
+    void mergeCombinesTwoDecks() {
+        Deck deck1 = new Deck.Builder("Deck1").deckCount(1).build();
+        Deck deck2 = new Deck.Builder("Deck2").deckCount(1).build();
+        
+        int size1 = deck1.size();
+        int size2 = deck2.size();
+
+        deck1.merge(deck2);
+
+        assertEquals(size1 + size2, deck1.size());
+    }
+
+    @Test
+    void copyCreatesIndependentDeck() {
+        Deck original = new Deck.Builder("Original").deckCount(1).build();
+        Deck copy = original.copy("Copy");
+
+        assertEquals(new ArrayList<>(original.getBackingCollection()), new ArrayList<>(copy.getBackingCollection()));
+        assertNotSame(original.getBackingCollection(), copy.getBackingCollection());
+    }
+
+    @Test
+    void splitSplitsDeckIntoTwo() {
+        Deck deck = new Deck.Builder("Test").deckCount(1).build();
+        int originalSize = deck.size();
+
+        List<Deck> splitDecks = deck.split(originalSize / 2, "First", "Second");
+
+        assertEquals(2, splitDecks.size());
+        assertEquals(originalSize, splitDecks.get(0).size() + splitDecks.get(1).size());
+        assertEquals(0, deck.size());
+    }
+
     // --- Deal & State Tests ---
 
     @Test
     void dealRemovesCardsFromDeck() {
         Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         deck.deal(hand, 5);
 
@@ -176,7 +270,7 @@ public class DeckTest {
     @Test
     void dealMovesCardsToHand() {
         Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         deck.deal(hand, 10);
 
@@ -187,7 +281,7 @@ public class DeckTest {
     @Test
     void dealAllCardsWorks() {
         Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         deck.deal(hand, 52);
 
@@ -198,7 +292,7 @@ public class DeckTest {
     @Test
     void dealTooManyCardsThrowsException() {
         Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         assertThrows(IllegalArgumentException.class, () -> {
             deck.deal(hand, 53);
@@ -217,7 +311,7 @@ public class DeckTest {
     @Test
     void dealZeroCardsThrowsException() {
         Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         assertThrows(IllegalArgumentException.class, () -> {
             deck.deal(hand, 0);
@@ -227,7 +321,7 @@ public class DeckTest {
     @Test
     void dealNegativeCardsThrowsException() {
         Deck deck = new Deck.Builder("Standard").deckCount(1).build();
-        Hand hand = new Hand("Player");
+        Hand hand = new Hand.Builder("Player").build();
 
         assertThrows(IllegalArgumentException.class, () -> {
             deck.deal(hand, -1);

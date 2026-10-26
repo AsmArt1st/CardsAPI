@@ -2,9 +2,11 @@ package cardsapi;
 
 //imports yay
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 
 /**
@@ -16,6 +18,9 @@ import java.util.ArrayList;
  */
 
 public class Deck extends Pile{
+    
+    //fields
+    private final List<Card> originalCards;
 
     public static class Builder {
         
@@ -23,7 +28,7 @@ public class Deck extends Pile{
         private String deckName;
         private boolean hasJokers;
         private int numDecks;
-        private List<Card> tempCards = new ArrayList<>();
+        private Deque<Card> tempCards = new ArrayDeque<>();
 
         public Builder(String deckName) {
             this.deckName = deckName;
@@ -67,10 +72,10 @@ public class Deck extends Pile{
      * @throws IllegalArgumentException if deck name is null
      */
 
-    private Deck(List<Card> cards, String name) {
+    private Deck(Deque<Card> cards, String name) {
         
-        super(name);
-        getBackingCollection().addAll(cards);
+        super(cards, name);
+        this.originalCards = new ArrayList<>(cards);
     }
 
 
@@ -84,8 +89,9 @@ public class Deck extends Pile{
      * @return returns deck backing collection as a modifiable List
      */
 
-    private List<Card> getDeckList() {
-        return (List<Card>) getBackingCollection();
+    private Deque<Card> getDeckCollection() {
+
+        return (Deque<Card>) getBackingCollection();
     }
 
 
@@ -98,7 +104,96 @@ public class Deck extends Pile{
     public void shuffle(long seed) {
 
         Random random = new Random(seed);
-        Collections.shuffle(getDeckList(), random);
+        List<Card> currentCards = new ArrayList<>(getDeckCollection());
+        Collections.shuffle(currentCards, random);
+        getDeckCollection().clear();
+        getDeckCollection().addAll(currentCards);
+    }
+
+    public void shuffle() {
+
+        shuffle(System.currentTimeMillis());
+    }
+
+    public Card peekTopCard(){
+
+        return getDeckCollection().peekLast();
+    }
+
+    public Card drawTopCard(Hand hand){
+        
+        Card card = getDeckCollection().pollLast();
+        hand.addCard(card);
+        return card;
+    }
+
+    public void reset() {
+
+        getDeckCollection().clear();
+        getDeckCollection().addAll(originalCards);
+    }
+
+    public void cut() {
+
+        List<Card> list = new ArrayList<>(getDeckCollection());
+        int midpoint = list.size()/2;
+        List<Card> topHalf = list.subList(0, midpoint);
+        List<Card> bottomHalf = list.subList(midpoint, list.size()); 
+
+        getDeckCollection().clear();
+        getDeckCollection().addAll(bottomHalf);
+        getDeckCollection().addAll(topHalf);
+    }
+
+    public void merge(Deck deck) {
+
+        if (deck == null) {
+
+            throw new NullPointerException("Cannot merge into a null Deck");
+        }
+        
+        List<Card> deckList = new ArrayList<>(deck.getDeckCollection());
+        getDeckCollection().addAll(deckList);
+    }
+
+    public Deck copy(String name) {
+
+        if (name == null || name.isEmpty()) {
+            name = "Copy Deck";
+        }
+
+        Deque<Card> copyDeck = new ArrayDeque<>(getDeckCollection());
+        return new Deck(copyDeck, name);
+    }
+
+    public List<Deck> split(int splitIndex, String name1, String name2) {
+
+        if (splitIndex > size()-1 || splitIndex < 1) {
+
+            throw new IllegalArgumentException("Split index must fall between 1 and " + (size()-1));
+        }
+
+        if (name1 == null || name1.isEmpty()) {
+            name1 = "First Deck";
+        }
+
+        if (name2 == null || name2.isEmpty()) {
+            name2 = "Second Deck";
+        }
+
+        List<Deck> deckList = new ArrayList<>();
+        List<Card> list = new ArrayList<>(getDeckCollection());
+        List<Card> topPart = list.subList(0, splitIndex);
+        List<Card> bottomPart = list.subList(splitIndex, list.size());
+
+        Deque<Card> firstDeck = new ArrayDeque<Card>(topPart);
+        Deque<Card> secondDeck = new ArrayDeque<Card>(bottomPart);
+
+        getDeckCollection().clear();
+
+        deckList.add(new Deck(firstDeck, name1));
+        deckList.add(new Deck(secondDeck, name2));
+        return deckList;
     }
 
 
@@ -129,7 +224,7 @@ public class Deck extends Pile{
         
         //method body
         for (int i = 0; i < dealSize; i++) {
-            Card topCard = getDeckList().get(size()-1);
+            Card topCard = getDeckCollection().peekLast();
             transferCard(hand, topCard);
         }
     }

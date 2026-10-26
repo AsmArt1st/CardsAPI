@@ -8,6 +8,21 @@ package cardsapi;
 
 public class Hand extends Pile {
 
+    public static class Builder {
+
+        //fields
+        private String handName;
+
+        public Builder(String handName) {
+            this.handName = handName;
+        }
+
+        public Hand build() {
+
+            return new Hand(handName);
+        }
+    }
+
     /**
      * Constructs a Hand object
      * 
@@ -17,11 +32,12 @@ public class Hand extends Pile {
      * @throws IllegalArgumentException if name is null
      */
 
-    public Hand(String name) {
+    private Hand(String name) {
         super(name);
     }
 
      public void playCard(Pile playArea, Card card) {
+
         transferCard(playArea, card);
     }
 }

@@ -62,6 +62,7 @@ public abstract class Pile {
      */
     
     protected Pile(String name) {
+
         this(new ArrayList<Card>(), name);
     }
 
@@ -74,6 +75,7 @@ public abstract class Pile {
      */
 
     public Collection<Card> getCards() {
+
         return Collections.unmodifiableCollection(cards);
     }
 
@@ -85,6 +87,7 @@ public abstract class Pile {
      */
 
     protected Collection<Card> getBackingCollection() {
+
         return cards;
     }
 
@@ -96,6 +99,7 @@ public abstract class Pile {
      */
 
     public String getName() {
+
         return name;
     }
 
@@ -107,7 +111,13 @@ public abstract class Pile {
      */
 
     public int size() {
+
         return cards.size();
+    }
+
+    public boolean isEmpty() {
+
+        return cards.size() == 0;
     }
 
 
@@ -141,6 +151,7 @@ public abstract class Pile {
     */
 
     protected void removeCard(Card card) {
+        
         cards.remove(card);
     }
 
