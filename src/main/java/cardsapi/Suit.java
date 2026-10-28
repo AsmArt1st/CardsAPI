@@ -6,19 +6,28 @@ package cardsapi;
 
 public enum Suit {
     
-    SPADES("Spades"),
-    HEARTS("Hearts"),
-    DIAMONDS("Diamonds"),
-    CLUBS("Clubs");
+    SPADES("Spades", 4),
+    HEARTS("Hearts", 3),
+    DIAMONDS("Diamonds", 2),
+    CLUBS("Clubs", 1);
 
     private final String suitName;
+    private final int suitValue;
 
-    Suit(String suitName) {
+    Suit(String suitName, int suitValue) {
+
         this.suitName = suitName;
+        this.suitValue = suitValue;
     }
 
     @Override
     public String toString() {
+
         return suitName;
+    }
+
+    public int getSuitValue() {
+
+        return suitValue;
     }
 }

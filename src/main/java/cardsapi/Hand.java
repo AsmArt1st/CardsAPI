@@ -1,5 +1,8 @@
 package cardsapi;
 
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Represents hands as an ArrayList of card objects
  * 
@@ -14,6 +17,7 @@ public class Hand extends Pile {
         private String handName;
 
         public Builder(String handName) {
+
             this.handName = handName;
         }
 
@@ -33,7 +37,23 @@ public class Hand extends Pile {
      */
 
     private Hand(String name) {
+
         super(name);
+    }
+
+    public void sort(Comparator<Card> comparator) {
+
+        ((List<Card>) getBackingCollection()).sort(comparator);
+    }
+
+    public void rankSort() {
+
+        sort(Card.sortByRank);
+    }
+
+    public void suitSort() {
+
+        sort(Card.sortBySuit);
     }
 
      public void playCard(Pile playArea, Card card) {

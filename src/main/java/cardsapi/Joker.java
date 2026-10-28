@@ -12,11 +12,13 @@ public enum Joker {
     private final String jokerName;
 
     Joker(String jokerName) {
+
         this.jokerName = jokerName;
     }
 
     @Override
     public String toString() {
+        
         return jokerName;
     }
     

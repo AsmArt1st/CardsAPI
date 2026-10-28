@@ -2,6 +2,7 @@ package cardsapi;
 
 //imports
 import java.util.Objects;
+import java.util.Comparator;
 
 
 /**
@@ -61,6 +62,12 @@ public class Card {
         this.suit = null;
     }
 
+    public static final Comparator<Card> sortByRank = Comparator.comparingInt((Card c) -> c.getRank().getRankValue())
+                                                                .thenComparingInt((Card c) -> c.getSuit().getSuitValue());
+                                    
+    public static final Comparator<Card> sortBySuit = Comparator.comparingInt((Card c) -> c.getSuit().getSuitValue())
+                                                                .thenComparingInt((Card c) -> c.getRank().getRankValue());
+
     /**
      * Allows caller to get the rank of given card
      * 
@@ -70,6 +77,11 @@ public class Card {
     public Rank getRank() {
 
         return rank;
+    }
+
+    public int getSuitValue() {
+
+        return suit.getSuitValue();
     }
 
 
