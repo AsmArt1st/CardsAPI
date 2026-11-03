@@ -1,8 +1,6 @@
 package cardsapi;
 
 //imports yay
-import java.util.Collections;
-import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -112,27 +110,6 @@ public class Deck extends Pile{
     private Deque<Card> getDeckCollection() {
 
         return (Deque<Card>) getBackingCollection();
-    }
-
-
-    /**
-     * Shuffles the given deck
-     * 
-     * randomizes the position of cards in a given deck
-     */
-
-    public void shuffle(long seed) {
-
-        Random random = new Random(seed);
-        List<Card> currentCards = new ArrayList<>(getDeckCollection());
-        Collections.shuffle(currentCards, random);
-        getDeckCollection().clear();
-        getDeckCollection().addAll(currentCards);
-    }
-
-    public void shuffle() {
-
-        shuffle(System.currentTimeMillis());
     }
 
     public Card peekTopCard() {

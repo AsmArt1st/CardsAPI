@@ -1,12 +1,8 @@
 package cardsapi;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Deque;
-import java.util.List;
-import java.util.Random;
 
 public class DiscardPile extends Pile {
 
@@ -14,7 +10,6 @@ public class DiscardPile extends Pile {
 
         //fields
         private String pileName;
-        private boolean isShuffled;
 
         public Builder(String pileName) {
 
@@ -26,22 +21,11 @@ public class DiscardPile extends Pile {
             this.pileName = pileName;
         }
 
-        public Builder isShuffled(boolean isShuffled) {
-
-            this.isShuffled = isShuffled;
-            return this;
-        }
-
         public DiscardPile build() {
 
             ArrayDeque<Card> discardPileCards = new ArrayDeque<Card>();
 
             DiscardPile discardPile = new DiscardPile(discardPileCards, this.pileName);
-
-            if (isShuffled) {
-
-                discardPile.shuffle();
-            }
 
             return discardPile;
         }
@@ -63,27 +47,6 @@ public class DiscardPile extends Pile {
     private Deque<Card> getDiscardPileCollection() {
 
         return (Deque<Card>) getBackingCollection();
-    }
-
-
-    /**
-     * Shuffles the given Discard Pile
-     * 
-     * randomizes the position of cards in a given DiscardPile
-     */
-
-    public void shuffle(long seed) {
-
-        Random random = new Random(seed);
-        List<Card> currentCards = new ArrayList<>(getDiscardPileCollection());
-        Collections.shuffle(currentCards, random);
-        getDiscardPileCollection().clear();
-        getDiscardPileCollection().addAll(currentCards);
-    }
-
-    public void shuffle() {
-
-        shuffle(System.currentTimeMillis());
     }
 
     public Card peekTopCard() {

@@ -2,11 +2,7 @@ package cardsapi;
 
 import java.util.Deque;
 import java.util.ArrayDeque;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
 
 public class DrawPile extends Pile {
 
@@ -75,27 +71,6 @@ public class DrawPile extends Pile {
     private Deque<Card> getDrawPileCollection() {
 
         return (Deque<Card>) getBackingCollection();
-    }
-
-
-    /**
-     * Shuffles the given DrawPile
-     * 
-     * randomizes the position of cards in a given DrawPile
-     */
-
-    public void shuffle(long seed) {
-
-        Random random = new Random(seed);
-        List<Card> currentCards = new ArrayList<>(getDrawPileCollection());
-        Collections.shuffle(currentCards, random);
-        getDrawPileCollection().clear();
-        getDrawPileCollection().addAll(currentCards);
-    }
-
-    public void shuffle() {
-
-        shuffle(System.currentTimeMillis());
     }
 
     public Card peekTopCard() {

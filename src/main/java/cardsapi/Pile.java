@@ -3,6 +3,8 @@ package cardsapi;
 //imports yay
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 
 
@@ -122,6 +124,26 @@ public abstract class Pile {
 
 
     //Manipulation methods
+
+    /**
+     * Shuffles the given Discard Pile
+     * 
+     * randomizes the position of cards in a given DiscardPile
+     */
+
+    public void shuffle(long seed) {
+
+        Random random = new Random(seed);
+        List<Card> currentCards = new ArrayList<>(cards);
+        Collections.shuffle(currentCards, random);
+        cards.clear();
+        cards.addAll(currentCards);
+    }
+
+    public void shuffle() {
+
+        shuffle(System.currentTimeMillis());
+    }
 
     /**
      * Adds a card to a pile
