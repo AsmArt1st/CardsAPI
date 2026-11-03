@@ -28,23 +28,34 @@ public class Deck extends Pile{
         private String deckName;
         private boolean hasJokers;
         private int numDecks;
-        private Deque<Card> tempCards = new ArrayDeque<>();
+        private boolean isShuffled;
 
         public Builder(String deckName) {
+
             this.deckName = deckName;
         }
 
         public Builder withJokers(boolean hasJokers) {
+
             this.hasJokers = hasJokers;
             return this;
         }
 
         public Builder deckCount(int numDecks) {
+
             this.numDecks = numDecks;
             return this;
         }
 
+        public Builder isShuffled(boolean isShuffled) {
+
+            this.isShuffled = isShuffled;
+            return this;
+        }
+
         public Deck build() {
+
+            Deque<Card> tempCards = new ArrayDeque<>();
 
             for (int i=0; i < numDecks; i++) {
                 for (Suit suit : Suit.values()) {
@@ -52,6 +63,7 @@ public class Deck extends Pile{
                         tempCards.add(new Card(rank, suit));
                     }
                 }
+
                 if (hasJokers) {
                     for (Joker joker : Joker.values()) {
                         tempCards.add(new Card(joker));
@@ -59,7 +71,15 @@ public class Deck extends Pile{
                 }
             }
 
-            return new Deck(this.tempCards, this.deckName);
+            Deck newDeck =  new Deck(tempCards, this.deckName);
+
+            if (isShuffled) {
+
+                newDeck.shuffle();
+            }
+
+            return newDeck;
+
         }
     }
 
@@ -115,12 +135,17 @@ public class Deck extends Pile{
         shuffle(System.currentTimeMillis());
     }
 
-    public Card peekTopCard(){
+    public Card peekTopCard() {
 
         return getDeckCollection().peekLast();
     }
 
-    public Card drawTopCard(Hand hand){
+    public Card drawTopCard(Hand hand) {
+
+        if (hand == null) {
+            throw new IllegalArgumentException("Hand cannot be null");
+        }
+
         
         Card card = getDeckCollection().pollLast();
         hand.addCard(card);
@@ -174,10 +199,12 @@ public class Deck extends Pile{
         }
 
         if (name1 == null || name1.isEmpty()) {
+
             name1 = "First Deck";
         }
 
         if (name2 == null || name2.isEmpty()) {
+
             name2 = "Second Deck";
         }
 
@@ -211,14 +238,17 @@ public class Deck extends Pile{
 
         //validation
         if (hand == null) {
+
             throw new IllegalArgumentException("Hand cannot be null");
         }
 
         if (dealSize < 1) {
+
             throw new IllegalArgumentException("Must deal at least 1 card");
         }
 
         if (dealSize > size()) {
+            
             throw new IllegalArgumentException("Not enough cards left in deck");
         }
         

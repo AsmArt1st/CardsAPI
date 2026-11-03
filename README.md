@@ -70,9 +70,10 @@ System.out.println(hand);
 
 ## Future Plans
 
-```markdown
 -add support for bigger decks
 -more utilities
--additional deck customization
+
+-additional dec
+k customization
 
 and more to come!
