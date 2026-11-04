@@ -86,8 +86,8 @@ public class Deck extends Pile{
      * 
      * @param name name assigned to Deck object
      * @param builder 
-     * @throws IllegalArgumentException if deck name is less than 1 character
-     * @throws IllegalArgumentException if deck name is null
+     * @throws IllegalArgumentException if Deck name is less than 1 character
+     * @throws IllegalArgumentException if Deck name is null
      */
 
     private Deck(Deque<Card> cards, String name) {
@@ -100,11 +100,11 @@ public class Deck extends Pile{
     //Deck commands
 
     /**
-     * Helper method to cast deck backing collection
+     * Helper method to cast Deck backing collection
      * 
-     * Provides access to a deck's backing collection for modification
+     * Provides access to a Deck's backing collection for modification
      * 
-     * @return returns deck backing collection as a modifiable List
+     * @return returns Deck backing collection as a modifiable List
      */
 
     private Deque<Card> getDeckCollection() {
@@ -125,8 +125,7 @@ public class Deck extends Pile{
 
         
         Card card = getDeckCollection().pollLast();
-        hand.addCard(card);
-        return card;
+        return transferCard(hand, card);
     }
 
     public void reset() {
@@ -202,13 +201,13 @@ public class Deck extends Pile{
 
 
     /**
-     * Deals x cards from the top of the given deck to a specified hand
+     * Deals x cards from the top of the given Deck to a specified Hand
      * 
-     * @param hand needs a hand object as an input to deal cards to
+     * @param hand needs a Hand object as an input to deal cards to
      * @param dealSize needs an integer to decide how many cards to deal
-     * @throws IllegalArgumentException if hand is null
+     * @throws IllegalArgumentException if Hand is null
      * @throws IllegalArgumentException if dealSize is less than 1
-     * @throws IllegalArgumentException if there aren't enough cards left in specified deck
+     * @throws IllegalArgumentException if there aren't enough Cards left in specified Deck
      */
 
     public void deal(Hand hand, int dealSize) {

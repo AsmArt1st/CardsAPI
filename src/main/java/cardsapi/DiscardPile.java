@@ -1,8 +1,9 @@
 package cardsapi;
 
+//imports yay
+import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.Deque;
 
 public class DiscardPile extends Pile {
 
@@ -54,24 +55,26 @@ public class DiscardPile extends Pile {
         return getDiscardPileCollection().peekLast();
     }
 
-    public void returnTopCard(Deck deck) {
+    public Card returnTopCard(Deck deck) {
 
         if(isEmpty()) {
 
             throw new IllegalArgumentException("Discard Pile is empty");
         }
 
-        transferCard(deck, getDiscardPileCollection().pollLast());
+        Card card = getDiscardPileCollection().pollLast();
+
+        return transferCard(deck, card);
     }
 
     @Override
-    protected void removeCard(Card card) {
+    protected Card removeCard(Card card) {
 
         throw new UnsupportedOperationException("The removeCard() method is not supported for DiscardPile");
     }
 
     @Override
-    protected void transferCard(Pile pile, Card card) {
+    protected Card transferCard(Pile pile, Card card) {
 
         throw new UnsupportedOperationException("The transferCard() method is not supported for DiscardPile");
     }

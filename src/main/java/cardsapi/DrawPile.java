@@ -1,5 +1,6 @@
 package cardsapi;
 
+//imports yay
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -85,24 +86,23 @@ public class DrawPile extends Pile {
         }
         
         Card card = getDrawPileCollection().pollLast();
-        hand.addCard(card);
-        return card;
+        return transferCard(hand, card);
     }
 
     @Override
-    protected void addCard(Card card) {
+    protected Card addCard(Card card) {
 
         throw new UnsupportedOperationException("The addCard() method is not supported for DrawPile");
     }
     
     @Override
-    protected void removeCard(Card card) {
+    protected Card removeCard(Card card) {
 
         throw new UnsupportedOperationException("The removeCard() method is not supported for DrawPile");
     }
 
     @Override
-    protected void transferCard(Pile pile, Card card) {
+    protected Card transferCard(Pile pile, Card card) {
 
         throw new UnsupportedOperationException("The transferCard() method is not supported for DrawPile");
     }

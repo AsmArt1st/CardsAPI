@@ -56,8 +56,13 @@ public class Hand extends Pile {
         sort(Card.sortBySuit);
     }
 
-     public void playCard(Pile playArea, Card card) {
+     public Card playCard(CommunityPile playArea, Card card) {
 
-        transferCard(playArea, card);
+        return transferCard(playArea, card);
+    }
+
+    public Card takeCard(CommunityPile playArea, Card card) {
+
+        return playArea.transferCard(this, card);
     }
 }

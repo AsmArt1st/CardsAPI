@@ -152,7 +152,7 @@ public abstract class Pile {
      * @throws IllegalArgumentException if card is null
      */
 
-    protected void addCard(Card card) {
+    protected Card addCard(Card card) {
 
         //validation
         if (card == null) {
@@ -161,6 +161,7 @@ public abstract class Pile {
 
         //Method body
         cards.add(card);
+        return card;
     }
 
 
@@ -172,9 +173,10 @@ public abstract class Pile {
      * If the specified card isnt in the pile, nothing will happen
     */
 
-    protected void removeCard(Card card) {
+    protected Card removeCard(Card card) {
         
         cards.remove(card);
+        return card;
     }
 
 
@@ -188,7 +190,7 @@ public abstract class Pile {
      * @throws IllegalArgumentException if card is not in source pile
      */
 
-    protected void transferCard(Pile pile, Card card) {
+    protected Card transferCard(Pile pile, Card card) {
 
         //validation
         if (pile == null) {
@@ -207,6 +209,8 @@ public abstract class Pile {
         else {
             throw new IllegalArgumentException("Card does not exist");
         }
+
+        return card;
     }
         
 
