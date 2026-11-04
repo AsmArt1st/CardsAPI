@@ -31,10 +31,12 @@ public class Card {
 
         //validation
         if (rank == null) {
+
             throw new IllegalArgumentException("Rank cannot be null");
         }
 
         if (suit == null) {
+
             throw new IllegalArgumentException("Suit cannot be null");
         }
 
@@ -54,6 +56,7 @@ public class Card {
 
         //validation
         if (joker == null) {
+
             throw new IllegalArgumentException("Joker cannot be null");
         }
 
@@ -110,9 +113,10 @@ public class Card {
     public boolean isJoker() {
 
         if (rank == null && suit == null) {
+
             return true;
-        } 
-        else {
+        } else {
+
             return false;
         }
     }
@@ -120,9 +124,10 @@ public class Card {
     public boolean isStandard() {
 
         if (joker == null) {
+
             return true;
-        } 
-        else {
+        } else {
+
             return false;
         }
     }
@@ -133,12 +138,13 @@ public class Card {
     public String toString() {
         
         if (isStandard()) {
+
         return rank + " of " + suit;
-        }
-        else if (isJoker()) {
+        } else if (isJoker()) {
+
             return joker.toString();
-        }
-        else {
+        } else {
+
             throw new IllegalStateException("Card is in an invalid state: neither standard nor joker");
         }
     }
@@ -151,19 +157,24 @@ public class Card {
     public boolean equals(Object inCard) {
 
         if (!(inCard instanceof Card otherCard)) {
+
             return false;
         }
 
         if (otherCard.isStandard()) {
+
             return rank == otherCard.rank && suit == otherCard.suit;
         }
         else if (otherCard.isJoker()) {
+
             return joker == otherCard.joker;
         }
         else if (this.isJoker() != otherCard.isJoker()) {
+
             return false;
         }
         else {
+
             throw new IllegalStateException("Card is in an invalid state: neither standard nor joker");
         }
     }
@@ -173,12 +184,15 @@ public class Card {
     public int hashCode() {
 
         if (isStandard()) {
+
             return Objects.hash(rank, suit);
         }
         else if (isJoker()) {
+
             return Objects.hash(joker);
         }
         else {
+            
             throw new IllegalStateException("Card is in an invalid state: neither standard nor joker");
         }
     }

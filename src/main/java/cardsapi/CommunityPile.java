@@ -28,6 +28,11 @@ public class CommunityPile extends Pile{
 
         public Builder maxSize(int maxSize) {
 
+            if (maxSize == 0) {
+
+                throw new IllegalStateException("Community Pile maximum size cannot be zero");
+            }
+
             this.maxSize = maxSize;
             return this;
         }
@@ -65,6 +70,7 @@ public class CommunityPile extends Pile{
     protected Card addCard(Card card) {
 
         if (getCommunityPileCollection().size() >= maxSize) {
+            
             throw new UnsupportedOperationException("The addCard() method is not supported for CommunityPile");
         }
 

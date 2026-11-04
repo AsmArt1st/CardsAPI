@@ -120,6 +120,7 @@ public class Deck extends Pile{
     public Card drawTopCard(Hand hand) {
 
         if (hand == null) {
+
             throw new IllegalArgumentException("Hand cannot be null");
         }
 
@@ -230,6 +231,7 @@ public class Deck extends Pile{
         
         //method body
         for (int i = 0; i < dealSize; i++) {
+            
             Card topCard = getDeckCollection().peekLast();
             transferCard(hand, topCard);
         }

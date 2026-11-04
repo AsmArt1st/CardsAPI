@@ -82,6 +82,7 @@ public class DrawPile extends Pile {
     public Card drawTopCard(Hand hand) {
 
         if (hand == null) {
+            
             throw new IllegalArgumentException("Hand cannot be null");
         }
         

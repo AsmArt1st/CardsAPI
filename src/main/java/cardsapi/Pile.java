@@ -4,8 +4,8 @@ package cardsapi;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -122,6 +122,11 @@ public abstract class Pile {
         return cards.size() == 0;
     }
 
+    public boolean containsCard(Card card) {
+
+        return ((List<Card>) getBackingCollection()).contains(card);
+    }
+
 
     //Manipulation methods
 
@@ -156,6 +161,7 @@ public abstract class Pile {
 
         //validation
         if (card == null) {
+
             throw new IllegalArgumentException("Cannot add \"null\" to pile");
         }
 
@@ -194,19 +200,22 @@ public abstract class Pile {
 
         //validation
         if (pile == null) {
+
             throw new IllegalArgumentException("Pile cannot be null");
         }
 
         if (card == null) {
+
             throw new IllegalArgumentException("Cannot transfer a null card");
         }
 
         //method body
         if (cards.contains(card)) {
+
             cards.remove(card);
             pile.addCard(card);
-        }
-        else {
+        } else {
+
             throw new IllegalArgumentException("Card does not exist");
         }
 
@@ -231,6 +240,7 @@ public abstract class Pile {
         pile.append(name + ":\n");
 
         for (Card card : cards) {
+            
             pile.append(card + "\n");
         }
 
