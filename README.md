@@ -9,14 +9,23 @@ Originally a learning project but we'll see how big this grows
 ## Features
 
 Card objects with enum ranks and suits
+
 Standard deck creation for 52-card decks, with larger decks in multiples of 52 now supported as well
+
 Support for Jokers (Red and Black) in decks now
+
 Deck shuffling and dealing x cards to a hand
+
 Specialized Piles like Draw Piles, Discard Piles, and Community Piles for easier game design
+
 Hand management through the Hand class, now including rankSort, suitSort, and a bunch of specialized pile specific methods
+
 Comparators to sort cards by rank and suit
+
 New and improved builder patterns for all piles and sub-piles
+
 JUnit test files
+
 Maven support
 
 
