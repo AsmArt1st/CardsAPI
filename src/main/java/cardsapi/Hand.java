@@ -1,5 +1,6 @@
 package cardsapi;
 
+import java.util.ArrayDeque;
 import java.util.Comparator;
 import java.util.List;
 
@@ -58,12 +59,22 @@ public class Hand extends Pile {
 
      public Card playCard(CommunityPile playArea, Card card) {
 
-        return transferCard(playArea, card);
+        return this.transferCard(playArea, card);
     }
 
     public Card takeCard(CommunityPile playArea, Card card) {
 
         return playArea.transferCard(this, card);
+    }
+
+    public Card drawCard(DrawPile drawPile) {
+
+        return drawPile.transferCard(this, ((ArrayDeque <Card>) drawPile.getBackingCollection()).peekLast());
+    }
+
+    public Card discardCard(DiscardPile discardPile, Card card) {
+
+        return this.transferCard(discardPile, card);
     }
 
 }

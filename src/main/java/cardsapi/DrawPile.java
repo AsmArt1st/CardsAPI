@@ -79,17 +79,6 @@ public class DrawPile extends Pile {
         return getDrawPileCollection().peekLast();
     }
 
-    public Card drawTopCard(Hand hand) {
-
-        if (hand == null) {
-            
-            throw new IllegalArgumentException("Hand cannot be null");
-        }
-        
-        Card card = getDrawPileCollection().pollLast();
-        return transferCard(hand, card);
-    }
-
     @Override
     protected Card addCard(Card card) {
 
@@ -102,9 +91,4 @@ public class DrawPile extends Pile {
         throw new UnsupportedOperationException("The removeCard() method is not supported for DrawPile");
     }
 
-    @Override
-    protected Card transferCard(Pile pile, Card card) {
-
-        throw new UnsupportedOperationException("The transferCard() method is not supported for DrawPile");
-    }
 }
