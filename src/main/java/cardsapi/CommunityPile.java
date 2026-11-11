@@ -107,7 +107,7 @@ public class CommunityPile extends Pile{
 
         if (getCommunityPileCollection().size() >= maxSize) {
             
-            throw new UnsupportedOperationException("The addCard() method is not supported for CommunityPile");
+            throw new UnsupportedOperationException("The Community Pile is full");
         }
 
         getCommunityPileCollection().add(card);
