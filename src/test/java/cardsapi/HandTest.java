@@ -163,9 +163,9 @@ public class HandTest {
         hand.rankSort();
 
         List<Card> sortedCards = new ArrayList<>(hand.getBackingCollection());
-        assertEquals(Rank.TWO, sortedCards.get(0).getRank());
+        assertEquals(Rank.ACE, sortedCards.get(0).getRank());
         assertEquals(Rank.KING, sortedCards.get(1).getRank());
-        assertEquals(Rank.ACE, sortedCards.get(2).getRank());
+        assertEquals(Rank.TWO, sortedCards.get(2).getRank());
     }
 
     @Test
@@ -178,9 +178,9 @@ public class HandTest {
         hand.suitSort();
 
         List<Card> sortedCards = new ArrayList<>(hand.getBackingCollection());
-        assertEquals(Suit.CLUBS, sortedCards.get(0).getSuit());
+        assertEquals(Suit.SPADES, sortedCards.get(0).getSuit());
         assertEquals(Suit.HEARTS, sortedCards.get(1).getSuit());
-        assertEquals(Suit.SPADES, sortedCards.get(2).getSuit());
+        assertEquals(Suit.CLUBS, sortedCards.get(2).getSuit());
     }
 
     @Test

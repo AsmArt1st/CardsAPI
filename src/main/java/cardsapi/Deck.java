@@ -151,26 +151,6 @@ public class Deck extends Pile{
     }
 
     /**
-     * Removes the top Card from the Deck and adds it to the specified Hand.
-     *
-     * @param hand the Hand to receive the Card
-     * @return the Card that was drawn
-     * @throws IllegalArgumentException if Hand is null
-     */
-
-    public Card drawTopCard(Hand hand) {
-
-        if (hand == null) {
-
-            throw new IllegalArgumentException("Hand cannot be null");
-        }
-
-        
-        Card card = getDeckCollection().pollLast();
-        return transferCard(hand, card);
-    }
-
-    /**
      * Resets the Deck to its original state as it was when it was created.
      */
 

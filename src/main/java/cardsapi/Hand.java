@@ -119,6 +119,19 @@ public class Hand extends Pile {
     }
 
     /**
+     * Draws the top Card from a Deck into this Hand.
+     *
+     * @param drawPile the Deck to draw from
+     * @return the Card that was drawn
+     */
+
+    public Card drawCard(Deck deck) {
+
+        return deck.transferCard(this, ((ArrayDeque <Card>) deck.getBackingCollection()).peekLast());
+    }
+
+
+    /**
      * Moves a Card from this Hand to a DiscardPile.
      *
      * @param discardPile the DiscardPile to move the Card to

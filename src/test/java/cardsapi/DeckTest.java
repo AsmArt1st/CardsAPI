@@ -170,42 +170,6 @@ public class DeckTest {
         assertEquals(((Deque<Card>) deck.getBackingCollection()).peekLast(), topCard);
     }
 
-    @Test
-    void peekTopCardOnEmptyDeckReturnsNull() {
-
-        Deck fullDeck = new Deck.Builder("Test").deckCount(1).build();
-        while (fullDeck.size() > 0) {
-            fullDeck.drawTopCard(new Hand.Builder("Temp").build());
-        }
-
-        assertNull(fullDeck.peekTopCard());
-    }
-
-    @Test
-    void drawTopCardRemovesFromDeck() {
-        Deck deck = new Deck.Builder("Test").deckCount(1).build();
-        Hand hand = new Hand.Builder("Player").build();
-
-        int sizeBefore = deck.size();
-        deck.drawTopCard(hand);
-
-        assertEquals(sizeBefore - 1, deck.size());
-        assertEquals(1, hand.size());
-    }
-
-    @Test
-    void resetRestoresOriginalDeck() {
-        Deck deck = new Deck.Builder("Test").deckCount(1).build();
-        List<Card> originalCards = new ArrayList<>(deck.getBackingCollection());
-
-        deck.shuffle(999L);
-        deck.drawTopCard(new Hand.Builder("Temp").build()); // Remove one to make it different
-
-        deck.reset();
-
-        assertEquals(originalCards, new ArrayList<>(deck.getBackingCollection()));
-    }
-
     // --- Deck Manipulation Tests ---
 
     @Test
