@@ -83,7 +83,7 @@ public abstract class Pile {
 
 
     /**
-     * Returns anmodifiable collection of cards
+     * Returns a modifiable collection of cards
      * 
      * @return the backing collection of the cards in this pile
      */
@@ -237,7 +237,7 @@ public abstract class Pile {
 
         StringBuilder pile = new StringBuilder();
 
-        pile.append(name + ":\n");
+        pile.append("---" + name + "---\n");
 
         for (Card card : cards) {
             

@@ -66,10 +66,12 @@ public class Card {
     }
 
     public static final Comparator<Card> sortByRank = Comparator.comparingInt((Card c) -> c.getRank().getRankValue())
-                                                                .thenComparingInt((Card c) -> c.getSuit().getSuitValue());
+                                                                .thenComparingInt((Card c) -> c.getSuit().getSuitValue())
+                                                                .thenComparingInt((Card c) -> c.getJoker().getJokerValue()).reversed();
                                     
     public static final Comparator<Card> sortBySuit = Comparator.comparingInt((Card c) -> c.getSuit().getSuitValue())
-                                                                .thenComparingInt((Card c) -> c.getRank().getRankValue());
+                                                                .thenComparingInt((Card c) -> c.getRank().getRankValue())
+                                                                .thenComparingInt((Card c) -> c.getJoker().getJokerValue()).reversed();
 
     /**
      * Allows caller to get the rank of given card

@@ -62,7 +62,7 @@ public class DiscardPile extends Pile {
             throw new IllegalArgumentException("Discard Pile is empty");
         }
 
-        Card card = getDiscardPileCollection().pollLast();
+        Card card = this.peekTopCard();
 
         return transferCard(deck, card);
     }
@@ -71,12 +71,6 @@ public class DiscardPile extends Pile {
     protected Card removeCard(Card card) {
 
         throw new UnsupportedOperationException("The removeCard() method is not supported for DiscardPile");
-    }
-
-    @Override
-    protected Card transferCard(Pile pile, Card card) {
-
-        throw new UnsupportedOperationException("The transferCard() method is not supported for DiscardPile");
     }
     
 }
