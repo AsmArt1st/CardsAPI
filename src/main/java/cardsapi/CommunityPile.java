@@ -16,6 +16,12 @@ public class CommunityPile extends Pile{
         private String pileName;
         private int maxSize;
 
+        /**
+         * Constructs a Builder for a CommunityPile.
+         *
+         * @param pileName the name for the new CommunityPile
+         */
+
         public Builder(String pileName) {
 
             if (pileName == null) {
@@ -25,6 +31,14 @@ public class CommunityPile extends Pile{
 
             this.pileName = pileName;
         }
+
+        /**
+         * Configures the maximum size for the CommunityPile.
+         *
+         * @param maxSize the maximum number of Cards the pile can hold
+         * @return this Builder instance for method chaining
+         * @throws IllegalStateException if maxSize is zero
+         */
 
         public Builder maxSize(int maxSize) {
 
@@ -37,6 +51,12 @@ public class CommunityPile extends Pile{
             return this;
         }
 
+        /**
+         * Builds the CommunityPile object based on the configured parameters.
+         *
+         * @return a new CommunityPile instance
+         */
+
         public CommunityPile build() {
 
             ArrayList<Card> communityPileCards = new ArrayList<Card>(maxSize);
@@ -47,6 +67,14 @@ public class CommunityPile extends Pile{
         }
     }
 
+    /**
+     * Constructs a CommunityPile object.
+     *
+     * @param cards the initial collection of Cards
+     * @param name the name assigned to the CommunityPile
+     * @param maxSize the maximum size of the CommunityPile
+     */
+
     private CommunityPile(Collection<Card> cards, String name, int maxSize) {
 
         super(cards, name);
@@ -54,9 +82,9 @@ public class CommunityPile extends Pile{
     }
 
     /**
-     * Helper method to cast CommunityPile backing collection
+     * Helper method to cast CommunityPile backing collection.
      * 
-     * Provides access to a CommunityPile's backing collection for modification
+     * Provides access to a CommunityPile's backing collection for modification.
      * 
      * @return returns CommunityPile backing collection as a modifiable List
      */
@@ -65,6 +93,14 @@ public class CommunityPile extends Pile{
 
         return (List<Card>) getBackingCollection();
     }
+
+    /**
+     * Adds a Card to the CommunityPile, respecting the maxSize limit.
+     *
+     * @param card the Card to add
+     * @return the Card that was added
+     * @throws UnsupportedOperationException if the CommunityPile is at maximum capacity
+     */
 
     @Override
     protected Card addCard(Card card) {

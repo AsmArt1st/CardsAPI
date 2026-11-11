@@ -8,11 +8,11 @@ import java.util.ArrayDeque;
 
 
 /**
- * Creates "decks" of 52 cards with the standard 13 ranks and 4 suits
+ * Creates "decks" of 52 Cards with the standard 13 ranks and 4 suits.
  * 
- * Allows you to create new decks that store cards to be manipulated
+ * Allows you to create new Decks that store Cards to be manipulated.
  * 
- * Stores card objects
+ * Stores Card objects.
  */
 
 public class Deck extends Pile{
@@ -33,11 +33,12 @@ public class Deck extends Pile{
             this.deckName = deckName;
         }
 
-        public Builder withJokers(boolean hasJokers) {
-
-            this.hasJokers = hasJokers;
-            return this;
-        }
+        /**
+         * Configures the number of Decks to create.
+         *
+         * @param numDecks the number of Decks to include
+         * @return this Builder instance for method chaining
+         */
 
         public Builder deckCount(int numDecks) {
 
@@ -45,11 +46,37 @@ public class Deck extends Pile{
             return this;
         }
 
+        /**
+         * Configures whether the Deck should include Jokers.
+         *
+         * @param hasJokers true to include Jokers, false otherwise
+         * @return this Builder instance for method chaining
+         */
+        
+        public Builder withJokers(boolean hasJokers) {
+
+            this.hasJokers = hasJokers;
+            return this;
+        }
+
+        /**
+         * Configures whether the Deck should be shuffled upon creation.
+         *
+         * @param isShuffled true to shuffle the Deck after creation, false otherwise
+         * @return this Builder instance for method chaining
+         */
+
         public Builder isShuffled(boolean isShuffled) {
 
             this.isShuffled = isShuffled;
             return this;
         }
+
+        /**
+         * Builds the Deck object based on the configured parameters.
+         *
+         * @return a new Deck instance
+         */
 
         public Deck build() {
 
@@ -82,7 +109,7 @@ public class Deck extends Pile{
     }
 
     /**
-     * Constructs a deck object
+     * Constructs a Deck object.
      * 
      * @param name name assigned to Deck object
      * @param builder 
@@ -100,9 +127,9 @@ public class Deck extends Pile{
     //Deck commands
 
     /**
-     * Helper method to cast Deck backing collection
+     * Helper method to cast Deck backing collection.
      * 
-     * Provides access to a Deck's backing collection for modification
+     * Provides access to a Deck's backing collection for modification.
      * 
      * @return returns Deck backing collection as a modifiable List
      */
@@ -112,10 +139,24 @@ public class Deck extends Pile{
         return (Deque<Card>) getBackingCollection();
     }
 
+    /**
+     * Returns the top Card of the Deck without removing it.
+     *
+     * @return the top Card, or null if the Deck is empty
+     */
+    
     public Card peekTopCard() {
 
         return getDeckCollection().peekLast();
     }
+
+    /**
+     * Removes the top Card from the Deck and adds it to the specified Hand.
+     *
+     * @param hand the Hand to receive the Card
+     * @return the Card that was drawn
+     * @throws IllegalArgumentException if Hand is null
+     */
 
     public Card drawTopCard(Hand hand) {
 
@@ -129,11 +170,19 @@ public class Deck extends Pile{
         return transferCard(hand, card);
     }
 
+    /**
+     * Resets the Deck to its original state as it was when it was created.
+     */
+
     public void reset() {
 
         getDeckCollection().clear();
         getDeckCollection().addAll(originalCards);
     }
+
+    /**
+     * Splits the Deck in half, swapping the top and bottom halves.
+     */
 
     public void cut() {
 
@@ -147,6 +196,13 @@ public class Deck extends Pile{
         getDeckCollection().addAll(topHalf);
     }
 
+    /**
+     * Adds all Cards from the specified Deck to this Deck.
+     *
+     * @param deck the Deck to merge into this one
+     * @throws NullPointerException if Deck is null
+     */
+
     public void merge(Deck deck) {
 
         if (deck == null) {
@@ -158,6 +214,13 @@ public class Deck extends Pile{
         getDeckCollection().addAll(deckList);
     }
 
+    /**
+     * Creates a copy of this Deck.
+     *
+     * @param name the name for the new Deck
+     * @return a new Deck with the same Cards
+     */
+
     public Deck copy(String name) {
 
         if (name == null || name.isEmpty()) {
@@ -167,6 +230,16 @@ public class Deck extends Pile{
         Deque<Card> copyDeck = new ArrayDeque<>(getDeckCollection());
         return new Deck(copyDeck, name);
     }
+
+    /**
+     * Splits this Deck into two new Decks at the specified index.
+     *
+     * @param splitIndex the index at which to split the Deck
+     * @param name1 the name for the first new Deck
+     * @param name2 the name for the second new Deck
+     * @return a List containing the two new Decks
+     * @throws IllegalArgumentException if splitIndex is out of bounds
+     */
 
     public List<Deck> split(int splitIndex, String name1, String name2) {
 
@@ -202,10 +275,10 @@ public class Deck extends Pile{
 
 
     /**
-     * Deals x cards from the top of the given Deck to a specified Hand
+     * Deals x Cards from the top of the given Deck to a specified Hand
      * 
-     * @param hand needs a Hand object as an input to deal cards to
-     * @param dealSize needs an integer to decide how many cards to deal
+     * @param hand needs a Hand object as an input to deal Cards to
+     * @param dealSize needs an integer to decide how many Cards to deal
      * @throws IllegalArgumentException if Hand is null
      * @throws IllegalArgumentException if dealSize is less than 1
      * @throws IllegalArgumentException if there aren't enough Cards left in specified Deck
@@ -228,7 +301,7 @@ public class Deck extends Pile{
             
             throw new IllegalArgumentException("Not enough cards left in deck");
         }
-        
+
         //method body
         for (int i = 0; i < dealSize; i++) {
             

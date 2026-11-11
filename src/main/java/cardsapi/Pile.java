@@ -9,9 +9,9 @@ import java.util.Random;
 
 
 /**
- * Base class for collections that store card objects
+ * Base abstract class for collections that store Card objects.
  * 
- * Provides common methods for various pile types
+ * Provides common methods for various pile types.
  */
 
 public abstract class Pile {
@@ -21,15 +21,15 @@ public abstract class Pile {
 
     
     /**
-     * Constructs a Pile object
+     * Constructs a Pile object.
      * 
-     * The provided collection becomes the backing collection for this pile
+     * The provided collection becomes the backing collection for this Pile.
      * 
      * @param name name assigned to this pile
-     * @param cardCollection collection used to store cards in given pile
+     * @param cardCollection collection used to store Cards in given Pile
      * @throws IllegalArgumentException if name is empty
      * @throws IllegalArgumentException if name is null
-     * @throws IllegalArgumentException if cardCollection is null
+     * @throws IllegalArgumentException if CardCollection is null
      */
     
     protected Pile(Collection<Card> cardCollection, String name) {
@@ -54,11 +54,11 @@ public abstract class Pile {
 
 
     /**
-     * Constructs a Pile object
+     * Constructs a Pile object.
      * 
-     * Default backing collection is an arraylist
+     * Default backing collection is an ArrayList.
      * 
-     * @param name name assigned to this pile
+     * @param name name assigned to this Pile
      * @throws IllegalArgumentException if name is empty
      * @throws IllegalArgumentException if name is null
      */
@@ -71,9 +71,9 @@ public abstract class Pile {
     //getter methods
 
     /**
-     * Returns an unmodifiable collection of cards to
+     * Returns an unmodifiable collection of Cards.
      * 
-     * @return an unmodifiable collection of the cards in this pile
+     * @return an unmodifiable collection of the Cards in this Pile
      */
 
     public Collection<Card> getCards() {
@@ -83,9 +83,9 @@ public abstract class Pile {
 
 
     /**
-     * Returns a modifiable collection of cards
+     * Returns a modifiable collection of Cards.
      * 
-     * @return the backing collection of the cards in this pile
+     * @return the backing collection of the Cards in this Pile
      */
 
     protected Collection<Card> getBackingCollection() {
@@ -95,9 +95,9 @@ public abstract class Pile {
 
 
     /**
-     * Gets name of given pile
+     * Gets name of given Pile.
      * 
-     * @return the name assigned to this pile
+     * @return the name assigned to this Pile
      */
 
     public String getName() {
@@ -107,9 +107,9 @@ public abstract class Pile {
 
 
     /**
-     * Gets size of given pile
+     * Gets size of given Pile.
      * 
-     * @return the number of cards currently in this pile
+     * @return the number of Cards currently in this Pile
      */
 
     public int size() {
@@ -117,11 +117,24 @@ public abstract class Pile {
         return cards.size();
     }
 
+    /**
+     * Checks if the Pile is empty.
+     *
+     * @return true if the Pile contains no Cards, false otherwise
+     */
+
     public boolean isEmpty() {
 
         return cards.size() == 0;
     }
 
+    /**
+     * Checks if the Pile contains a specific Card.
+     *
+     * @param card the Card to search for
+     * @return true if the Card is in the Pile, false otherwise
+     */
+    
     public boolean containsCard(Card card) {
 
         return ((List<Card>) getBackingCollection()).contains(card);
@@ -131,9 +144,11 @@ public abstract class Pile {
     //Manipulation methods
 
     /**
-     * Shuffles the given Discard Pile
+     * Shuffles the given Pile.
      * 
-     * randomizes the position of cards in a given DiscardPile
+     * Randomizes the position of Cards in a given Pile.
+     * 
+     * @param seed the seed for the shuffle
      */
 
     public void shuffle(long seed) {
@@ -145,16 +160,24 @@ public abstract class Pile {
         cards.addAll(currentCards);
     }
 
+    /**
+     * Shuffles the given Pile.
+     * 
+     * Randomizes the position of Cards in a given Pile.
+     * 
+     * Default seed is the current time in milliseconds.
+     */
+
     public void shuffle() {
 
         shuffle(System.currentTimeMillis());
     }
 
     /**
-     * Adds a card to a pile
+     * Adds a Card to a Pile.
      * 
-     * @param card card to add to this pile
-     * @throws IllegalArgumentException if card is null
+     * @param card Card to add to this Pile
+     * @throws IllegalArgumentException if Card is null
      */
 
     protected Card addCard(Card card) {
@@ -172,11 +195,11 @@ public abstract class Pile {
 
 
     /** 
-     * Removes a card from a pile
+     * Removes a Card from a Pile.
      * 
-     * @param card card object to remove from pile
+     * @param card Card object to remove from Pile.
      * 
-     * If the specified card isnt in the pile, nothing will happen
+     * If the specified Card isnt in the pile, nothing will happen.
     */
 
     protected Card removeCard(Card card) {
@@ -187,13 +210,13 @@ public abstract class Pile {
 
 
     /**
-     * Transfers a card from the given pile to a specified pile
+     * Transfers a Card from the given Pile to a specified Pile.
      * 
-     * @param pile pile that receives transferred cards
-     * @param card which card is selected
+     * @param pile Pile that receives transferred Cards
+     * @param card which Card is selected
      * @throws IllegalArgumentException if pile is null
      * @throws IllegalArgumentException if transferCard is null
-     * @throws IllegalArgumentException if card is not in source pile
+     * @throws IllegalArgumentException if Card is not in source Pile
      */
 
     protected Card transferCard(Pile pile, Card card) {
@@ -227,9 +250,9 @@ public abstract class Pile {
     //Overrides
 
     /**
-     * Constructs a string to represent cards in a given pile
+     * Constructs a String to represent Cards in a given Pile.
      * 
-     * @return formatted string of pile name and cards contained
+     * @return formatted String of Pile name and Cards contained
      */
 
     @Override
